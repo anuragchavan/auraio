@@ -48,7 +48,7 @@ const tiers = [
     name: "Tier 1",
     label: "Basic Website",
     price: "€999–€1,999",
-    bullets: ["Up to 5–7 pages", "Responsive design", "Contact form & analytics", "Basic performance"],
+    bullets: ["Up to 5–7 pages", "Responsive design", "Contact form &amp; analytics", "Basic performance"],
   },
   {
     name: "Tier 2",
@@ -130,7 +130,8 @@ export default function AuraIOOnboarding() {
     updates: true,
   });
 
-  const update = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+  const update = (k: keyof typeof form, v: string | boolean) =>
+  setForm((f) => ({ ...f, [k]: v as any }));
 
 type LeadResponse = { ok?: boolean; id?: string; error?: string };
 
@@ -255,7 +256,7 @@ const submit = async (e: React.FormEvent<HTMLFormElement>) => {
                 </div>
                 <Separator className="my-4 bg-white/10" />
                 <div className="flex items-center justify-between">
-                  <div className="text-slate-300 text-sm">Transparent scope & milestones included</div>
+                  <div className="text-slate-300 text-sm">Transparent scope &amp; milestones included</div>
                   <Button size="sm" className="rounded-2xl">View Sample SOW</Button>
                 </div>
               </CardContent>
@@ -334,7 +335,7 @@ const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         <div className="grid md:grid-cols-2 gap-6 items-start">
           <div>
             <h2 className="text-2xl md:text-3xl font-semibold mb-2 text-slate-200">Tell us about your project</h2>
-            <p className="text-slate-300 mb-6">This quick brief helps us estimate timeline & budget precisely. We'll reply within one business day.</p>
+            <p className="text-slate-300 mb-6">This quick brief helps us estimate timeline &amp; budget precisely. We&apos;ll reply within one business day.</p>
 
             <form onSubmit={submit} className="space-y-4">
               <div className="grid md:grid-cols-2 gap-4">
@@ -377,7 +378,7 @@ const submit = async (e: React.FormEvent<HTMLFormElement>) => {
 
               <div className="flex items-center space-x-2">
                 <Checkbox id="updates" checked={form.updates} onCheckedChange={(v) => update("updates", Boolean(v))} />
-                <label htmlFor="updates" className="text-sm text-slate-300 leading-none">Send me product updates & case studies</label>
+                <label htmlFor="updates" className="text-sm text-slate-300 leading-none">Send me product updates &amp; case studies</label>
               </div>
 
               <div className="flex gap-3">
