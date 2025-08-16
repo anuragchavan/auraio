@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "AuraIO - Futuristic Web Experiences",
   description: "AuraIO builds modern, scalable, and futuristic digital experiences. From websites to SEO and growth marketing, we power your startup's aura.",
   icons: {
-    icon: "/favicon.ico>v=2",
+    icon: "/favicon.ico?v=2",
   },
 };
 
