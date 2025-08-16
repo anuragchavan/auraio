@@ -26,12 +26,22 @@ import {
   Infinity as InfinityIcon,
 } from "lucide-react";
 
-// ---- Utility Components ----
-const Section = ({ id, children, className = "" }) => (
-  <section id={id} className={`w-full max-w-6xl mx-auto px-4 md:px-8 ${className}`}>{children}</section>
+// Put this above the Section component
+type SectionProps = {
+  id?: string;
+  children: React.ReactNode;
+  className?: string;
+};
+
+const Section: React.FC<SectionProps> = ({ id, children, className = "" }) => (
+  <section id={id} className={`w-full max-w-6xl mx-auto px-4 md:px-8 ${className}`}>
+    {children}
+  </section>
 );
 
-const GradientOrb = ({ className = "" }) => (
+type GradientOrbProps = { className?: string };
+
+const GradientOrb: React.FC<GradientOrbProps> = ({ className = "" }) => (
   <div className={`pointer-events-none absolute -z-10 blur-3xl opacity-40 ${className}`} />
 );
 
@@ -107,7 +117,8 @@ if (__DEV__) {
     const labelSet = new Set(tiers.map((t) => t.label));
     console.assert(labelSet.size === tiers.length, "Tier labels should be unique");
     // Default form values sanity
-    console.assert(typeof ({}).hasOwnProperty.call({ updates: true }, "updates") === true, "Form has updates flag by default");
+    console.assert(Object.prototype.hasOwnProperty.call({ updates: true }, "updates") === true,"Form has updates flag by default");
+
 
     // --- More tests (added without changing existing ones) ---
     console.assert(new Set(steps.map((s) => s.title)).size === steps.length, "Step titles should be unique");
@@ -117,21 +128,33 @@ if (__DEV__) {
     // no-op: do not block rendering in production
   }
 }
+// ---- Form typing (removes all `any` needs) ----
+type FormState = {
+  name: string;
+  email: string;
+  company: string;
+  websiteType: string;
+  budget: string;
+  goals: string;
+  timeline: string;
+  updates: boolean;
+};
 
 export default function AuraIOOnboarding() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    company: "",
-    websiteType: "",
-    budget: "",
-    goals: "",
-    timeline: "",
-    updates: true,
-  });
+  const [form, setForm] = useState<FormState>({
+  name: "",
+  email: "",
+  company: "",
+  websiteType: "",
+  budget: "",
+  goals: "",
+  timeline: "",
+  updates: true,
+});
 
-  const update = (k: keyof typeof form, v: string | boolean) =>
-  setForm((f) => ({ ...f, [k]: v as any }));
+function update<K extends keyof FormState>(key: K, value: FormState[K]) {
+  setForm((prev) => ({ ...prev, [key]: value }));
+}
 
 type LeadResponse = { ok?: boolean; id?: string; error?: string };
 
