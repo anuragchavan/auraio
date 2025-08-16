@@ -132,8 +132,11 @@ export default function AuraIOOnboarding() {
 
   const update = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
-const submit = async (e: React.FormEvent) => {
+type LeadResponse = { ok?: boolean; id?: string; error?: string };
+
+const submit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
+
   try {
     const res = await fetch("/api/leads", {
       method: "POST",
@@ -141,17 +144,16 @@ const submit = async (e: React.FormEvent) => {
       body: JSON.stringify(form),
     });
 
+    const json: LeadResponse = await res.json().catch(() => ({}));
+
     if (!res.ok) {
-      const msg = await res.json().catch(() => ({}));
-      alert("Failed to submit: " + (msg?.error || res.statusText));
-      return;
+      throw new Error(json?.error ?? res.statusText);
     }
 
-    const data = await res.json();
-    alert("Thanks! Your brief has been recorded. Our team will reach out to you soon."); 
-    // Lead ID: " + data.id);
+    alert(`Thanks! Your brief has been recorded. Our team will reach out to you soon.`);
+    //Lead ID: ${json.id ?? "—"}
 
-    // optionally reset the form
+    // reset form (optional)
     setForm({
       name: "",
       email: "",
@@ -162,9 +164,10 @@ const submit = async (e: React.FormEvent) => {
       timeline: "",
       updates: true,
     });
-  } catch (err: any) {
-    console.error(err);
-    alert("Something went wrong. Please try again.");
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    console.error("Form submit failed:", err);
+    alert("Failed to submit: " + message);
   }
 };
 
